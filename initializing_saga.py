@@ -49,3 +49,39 @@ for host in np.unique(sats_completed_hosts['HOSTID']):
     sats_completed_hosts_sorted[host] = sats_completed_hosts[sats_completed_hosts['HOSTID']==host]
     
 host_sats = {k: v for k, v in sorted(host_sats.items(), key=lambda item: item[1])} #sort by number of satellites
+
+def load_table(name, including_stats):
+    """
+        loads in whatever Fits Tables of a set of SAGA hosts and corresponding satellites
+
+        Args: 
+            name = string of the name by which you're selecting your hosts
+            including_stats = what stats are being included in the table
+
+        Returns: 2 Fits Tables, one of the set of hosts and the other of the set of their satellites
+    """
+
+    table = saga.host_catalog.load(query=name, include_stats=including_stats)
+    table_query = saga.host_catalog.construct_host_query(name)
+    sats_table = complete_host_query.filter(sats)
+    return table, sats_table
+
+def sort_table(table, sats_table):
+     """
+        sorts through whatever tables of hosts and satellites with the hosts as their keys
+
+        Args: 
+            table = a Fits Table of SAGA hosts
+            sats_table = a Fits Table of corresponding SAGA satellites
+
+        Returns: 2 dictionaries with same-ordered keys of SAGA host names
+    """
+
+    table_hosts_sorted = {}
+    sats_table_sorted = {}
+
+    for host in np.unique(sats_table['HOSTID']):
+        table_hosts_sorted[host] = table[table['HOSTID']==host]
+        sats_table_sorted[host] = sats_table[sats_table['HOSTID']==host]
+
+    return table_hosts_sorted, sats_table_sorted
