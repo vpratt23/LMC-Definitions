@@ -76,12 +76,13 @@ def sort_table(table, sats_table):
 
         Returns: 2 dictionaries with same-ordered keys of SAGA host names
     """
-
-    table_hosts_sorted = {}
-    sats_table_sorted = {}
-
+    table_hosts_sorted
     for host in np.unique(sats_table['HOSTID']):
         table_hosts_sorted[host] = table[table['HOSTID']==host]
         sats_table_sorted[host] = sats_table[sats_table['HOSTID']==host]
-
+    
     return table_hosts_sorted, sats_table_sorted
+    
+
+   
+
